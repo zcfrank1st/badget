@@ -37,6 +37,15 @@ public class ConfigEntity {
         private String soName;
         private InteractionType type;
         private boolean enabled;
+        private String gadgetVersion;
+
+        public String getGadgetVersion() {
+            return gadgetVersion;
+        }
+
+        public void setGadgetVersion(String gadgetVersion) {
+            this.gadgetVersion = gadgetVersion;
+        }
 
         public String getPkgName() {
             return pkgName;
@@ -96,6 +105,7 @@ public class ConfigEntity {
                     ", soName='" + soName + '\'' +
                     ", type=" + type +
                     ", enabled=" + enabled +
+                    ", gadgetVersion=" + gadgetVersion +
                     '}';
         }
     }

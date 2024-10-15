@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.poorld.badget.entity.ConfigEntity;
 import com.poorld.badget.entity.InteractionType;
+import com.topjohnwu.superuser.ShellUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,14 +21,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import external.org.apache.commons.lang3.StringUtils;
 
 public class ConfigUtils {
 
     private static final String TAG = "Badget#ConfigUtils";
 
     public static final String DBAGET_PKG_NAME = "com.poorld.badget";
-    public static final String FRIDA_GADGET_LIB = "libfrida_gadget.so";
-    public static final String FRIDA_GADGET_CONFIG_LIB = "libfrida_gadget.config.so";
+//    public static final String FRIDA_GADGET_LIB = "libfrida_gadget.so";
+//    public static final String FRIDA_GADGET_CONFIG_LIB = "libfrida_gadget.config.so";
 
     private static final String DATA_LOCAL_TMP = "/data/local/tmp/";
     private static final String BADGET_DATA_PATH = "/data/local/tmp/badget/";
@@ -142,13 +147,42 @@ public class ConfigUtils {
         }
 
         File abiv8Dir = new File(badgetDir, ABI_V8A);
-        if (!new File(abiv8Dir, FRIDA_GADGET_LIB).exists()) {
+        File[] gadget8 = abiv8Dir.listFiles();
+        if (gadget8 == null) {
             return false;
+        } else {
+            List<String> soFiles = Arrays.stream(gadget8).map(File::getName).collect(Collectors.toList());
+            boolean containsSo = false;
+            for (String soFile : soFiles) {
+                if (soFile.endsWith(".so")) {
+                    containsSo = true;
+                    break;
+                }
+            }
+            if (!containsSo) {
+                return false;
+            }
         }
+//        if (!new File(abiv8Dir, FRIDA_GADGET_LIB). ()) {
+//            return false;
+//        }
 
         File abiv7Dir = new File(badgetDir, ABI_V7A);
-        if (!new File(abiv7Dir, FRIDA_GADGET_LIB).exists()) {
+        File[] gadget7 = abiv7Dir.listFiles();
+        if (gadget7 == null) {
             return false;
+        } else {
+            List<String> soFiles = Arrays.stream(gadget7).map(File::getName).collect(Collectors.toList());
+            boolean containsSo = false;
+            for (String soFile : soFiles) {
+                if (soFile.endsWith(".so")) {
+                    containsSo = true;
+                    break;
+                }
+            }
+            if (!containsSo) {
+                return false;
+            }
         }
 
         return true;
@@ -315,14 +349,14 @@ public class ConfigUtils {
             cmds.add("chmod 777 " + badgetConfigPath);
         }
 
-        ShellUtils.CommandResult result = ShellUtils.execCommand(cmds, true, true);
-        if (result.result == 0) {
+        boolean result = ShellUtils.fastCmdResult(cmds.toArray(new String[0]));
+        if (result) {
             Log.d(TAG, "create file success!");
         } else {
             Log.d(TAG, "create file failed!");
             //throw new RuntimeException();
         }
-        return result.result;
+        return result ? 0:1;
     }
 
 
@@ -349,8 +383,8 @@ public class ConfigUtils {
             List<String> cmds = new ArrayList<>();
             cmds.add("touch " + getBadgetConfigPath());
             cmds.add("chmod 777 " + getBadgetConfigPath());
-            ShellUtils.CommandResult result = ShellUtils.execCommand(cmds, true, true);
-            if (result.result == 0) {
+            boolean result = ShellUtils.fastCmdResult(cmds.toArray(new String[0]));
+            if (result) {
                 Log.d(TAG, "create file success!");
             } else {
                 Log.d(TAG, "create file failed!");
@@ -418,4 +452,9 @@ public class ConfigUtils {
         return null;
     }
 
+    // /data/local/tmp/badget/arm64-v8a[arm64-v7a]
+    public static List<String> getGadgetLibNames() {
+        File gadgets = new File("/data/local/tmp/badget/arm64-v8a");
+        return Arrays.stream(Objects.requireNonNull(gadgets.listFiles())).map(File::getName).collect(Collectors.toList());
+    }
 }

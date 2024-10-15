@@ -15,6 +15,9 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.topjohnwu.superuser.Shell;
+import com.topjohnwu.superuser.ShellUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -205,17 +208,16 @@ public class CommonUtils {
             if (!targetFile.getParentFile().exists()) {
                 // create dir: /data/local/tmp/badget/packageName/
                 // touch /data/local/tmp/badget/packageName/target.js
-                ShellUtils.execCommand(new String[]{
-                        "mkdir " + targetFile.getParentFile().getPath(),
-                        "touch " + targetFile.getPath(),
-                        "chmod 777 " + targetFile.getPath()
-                }, true, false);
+                ShellUtils.fastCmd(
+                        ("mkdir " + targetFile.getParentFile().getPath()),
+                        ("touch " + targetFile.getPath()),
+                        ("chmod 777 " + targetFile.getPath())
+                );
             } else {
                 // touch /data/local/tmp/badget/packageName/target.js
-                ShellUtils.execCommand(new String[]{
-                        "touch " + targetFile.getPath(),
-                        "chmod 777 " + targetFile.getPath()
-                }, true, false);
+                ShellUtils.fastCmd(
+                        ("touch " + targetFile.getPath()),
+                        ("chmod 777 " + targetFile.getPath()));
             }
 
             // 写入内容到/data/local/tmp/badget/packageName/targetFile.js

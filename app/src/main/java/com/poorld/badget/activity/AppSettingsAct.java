@@ -1,5 +1,7 @@
 package com.poorld.badget.activity;
 
+import static com.poorld.badget.utils.ConfigUtils.mConfigCache;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -12,7 +14,6 @@ import androidx.preference.SwitchPreference;
 //import androidx.preference.SwitchPreferenceCompat;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,14 +30,17 @@ import com.poorld.badget.entity.ItemAppEntity;
 import com.poorld.badget.utils.CommonUtils;
 import com.poorld.badget.utils.ConfigUtils;
 import com.poorld.badget.utils.PkgManager;
-import com.poorld.badget.utils.ShellUtils;
+import com.topjohnwu.superuser.ShellUtils;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 public class AppSettingsAct extends AppCompatActivity {
 
-    public static final String TAG = "AppSettingsAct";
+    public static final String TAG = "AppSettingsActAppSettingsAct";
+    public static final String cmdSoTemplate = "rm -rf /data/user/0/%s/app_libs/%s";
+
     private static ItemAppEntity mApp;
 
     private MaterialToolbar toolbar;
@@ -120,6 +124,7 @@ public class AppSettingsAct extends AppCompatActivity {
         private static final String KEY_PREF_SCRIPT_DIRECTORY = "pref_script_directory";
 
         private static final String KEY_INTERACTION_TYPES = "interaction_types";
+        private static final String KEY_GADGET_VERSIONS = "gadget_list";
 
         Preference prefApp;
         Preference prefJs;
@@ -127,6 +132,7 @@ public class AppSettingsAct extends AppCompatActivity {
 
         ListPreference prefType;
         SwitchPreference prefEnable;
+        ListPreference prefVersion;
 
         PreferenceGroup managerGroup;
         private ConfigEntity.PkgConfig pkgConfig;
@@ -142,6 +148,20 @@ public class AppSettingsAct extends AppCompatActivity {
 
             prefApp = findPreference(KEY_PREF_APP);
             prefEnable = findPreference(KEY_PREF_SWITCH_ENABLE);
+
+            prefVersion = findPreference(KEY_GADGET_VERSIONS);
+            List<String> gadgetFiles = ConfigUtils.getGadgetLibNames();
+            CharSequence mentries[] = new String[gadgetFiles.size()];
+            CharSequence mentryValues[] = new String[gadgetFiles.size()];
+            int i = 0;
+            for (String mdata : gadgetFiles) {
+                mentries[i] = mdata;
+                mentryValues[i] = Integer.toString(i);
+                i++;
+            }
+            prefVersion.setEntries(mentries);
+            prefVersion.setEntryValues(mentryValues);
+
             prefJs = findPreference(KEY_PREF_JS_PATH);
             prefScriptDirectory = findPreference(KEY_PREF_SCRIPT_DIRECTORY);
             prefType = findPreference(KEY_INTERACTION_TYPES);
@@ -153,6 +173,7 @@ public class AppSettingsAct extends AppCompatActivity {
                 mApp = PkgManager.getItemAppEntity(getActivity(), pkg);
                 if (mApp != null) {
                     prefEnable.setOnPreferenceChangeListener(this);
+                    prefVersion.setOnPreferenceChangeListener(this);
                     prefJs.setOnPreferenceClickListener(this);
                     prefScriptDirectory.setOnPreferenceClickListener(this);
                     prefType.setOnPreferenceChangeListener(this);
@@ -278,9 +299,9 @@ public class AppSettingsAct extends AppCompatActivity {
                     .setMessage(String.format("是否删除脚本 %s ?", file.getName()))
                     .setPositiveButton("确定", (dialogInterface, i) -> {
                         //file.delete();
-                        ShellUtils.CommandResult result = ShellUtils.execCommand("rm " + file.getPath(), true, true);
-                        Log.d(TAG, "result.result: " + result.result);
-                        if (result.result == 0) {
+                        boolean result = ShellUtils.fastCmdResult(("rm " + file.getPath()));
+                        Log.d(TAG, "result.result: " + result);
+                        if (result) {
                             removeScriptByKey(key);
                         }
 
@@ -295,17 +316,27 @@ public class AppSettingsAct extends AppCompatActivity {
         @Override
         public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
             Log.d(TAG, "onPreferenceChange: ");
+            Log.d(TAG, pkgConfig.getPkgName());
 
             if (pkgConfig == null) {
                 return false;
             }
 
             if (KEY_PREF_SWITCH_ENABLE.equals(preference.getKey())) {
-
-                Log.d(TAG, pkgConfig.getPkgName());
-                pkgConfig.setEnabled((Boolean) newValue);
+                boolean flag =  (Boolean) newValue;
+                pkgConfig.setEnabled(flag);
                 pkgConfig.setAppName(mApp.getAppName());
 
+                if(!flag){
+                    boolean delete1 = com.topjohnwu.superuser.ShellUtils.fastCmdResult(String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetLibName(pkgConfig.getSoName())));
+                    boolean delete2 = com.topjohnwu.superuser.ShellUtils.fastCmdResult(String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetConfigLibName(pkgConfig.getSoName())));
+
+                    Log.d(TAG, "lib so removed！" + String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetLibName(pkgConfig.getSoName())) + "->" + delete1);
+                    Log.d(TAG, "lib config so removed！" + String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetConfigLibName(pkgConfig.getSoName()))+ "->" + delete2);
+
+                    mConfigCache.addPkgConfigs(pkgConfig.getPkgName(), null);
+
+                }
                 ConfigUtils.updatePkgConfig();
 
             } else if (KEY_INTERACTION_TYPES.equals(preference.getKey())) {
@@ -319,6 +350,13 @@ public class AppSettingsAct extends AppCompatActivity {
                 pkgConfig.setType(interactionType);
                 ConfigUtils.updatePkgConfig();
 
+            } else if (KEY_GADGET_VERSIONS.equals(preference.getKey())) {
+                int index = Integer.parseInt((String) newValue);
+                Log.d(TAG, "index:" + index);
+
+                pkgConfig.setGadgetVersion((String) prefVersion.getEntries()[index]);
+                prefVersion.setSummary((String) prefVersion.getEntries()[index]);
+                ConfigUtils.updatePkgConfig();
             }
             return true;
         }

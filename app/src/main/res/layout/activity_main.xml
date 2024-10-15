@@ -98,7 +98,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textAppearance="?textAppearanceBodySmall"
                                 android:textColor="?colorOnPrimary"
-                                android:text="frida-gadget版本[16.0.17]" />
+                                android:text="666 frida-gadget 666" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

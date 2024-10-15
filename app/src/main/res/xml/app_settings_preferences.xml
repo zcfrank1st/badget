@@ -22,6 +22,11 @@
             android:summaryOn=""
             android:title="注入frida-gadget" />
 
+        <ListPreference
+            android:key="gadget_list"
+            android:title="选择版本"
+            android:summary="" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

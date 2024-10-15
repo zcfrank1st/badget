@@ -99,6 +99,8 @@ public class Badget implements IXposedHookLoadPackage {
                     Log.d(TAG, "appGadgetLib: " + appGadgetLib);
                     if (!appGadgetLib.exists()) {
                         String gadgetLibName = ConfigUtils.getGadgetLibName(pkgConfig.getSoName());
+
+//                        TODO 拷贝具体版本frida gadget
                         CommonUtils.copyFile(ConfigUtils.getBadgetDataPath() + ABI, applibDir, gadgetLibName);
                     }
 
