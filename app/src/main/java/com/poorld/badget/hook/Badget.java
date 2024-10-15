@@ -12,6 +12,7 @@ import com.poorld.badget.entity.InteractionType;
 import com.poorld.badget.utils.CommonUtils;
 import com.poorld.badget.utils.ConfigUtils;
 import com.poorld.badget.utils.LoadLibraryUtil;
+import com.topjohnwu.superuser.ShellUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -99,9 +100,8 @@ public class Badget implements IXposedHookLoadPackage {
                     Log.d(TAG, "appGadgetLib: " + appGadgetLib);
                     if (!appGadgetLib.exists()) {
                         String gadgetLibName = ConfigUtils.getGadgetLibName(pkgConfig.getSoName());
-
-//                        TODO 拷贝具体版本frida gadget
-                        CommonUtils.copyFile(ConfigUtils.getBadgetDataPath() + ABI, applibDir, gadgetLibName);
+//                        TODO 是否可以自行添加 native 加载目录
+                        CommonUtils.doCopy(ConfigUtils.getBadgetDataPath() + ABI + File.separator + pkgConfig.getGadgetVersion(), applibDir + File.separator + gadgetLibName);
                     }
 
                     // save librandom.config.so

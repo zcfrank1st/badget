@@ -1,6 +1,7 @@
 package com.poorld.badget.utils;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -302,7 +303,7 @@ public class ConfigUtils {
         return json.replaceAll("\\\\", "");
     }
 
-    public static int firstInit(Context applicationContext) {
+    public static int firstInit(Context applicationContext) throws PackageManager.NameNotFoundException {
 
         // /data/user/0/com.poorld.badget/app_cache
         File appCache = applicationContext.getDir("cache", Context.MODE_PRIVATE);
@@ -319,7 +320,11 @@ public class ConfigUtils {
         /**
          * unzip /data/user/0/com.poorld.badget/app_cache/badget.zip
          */
-        String zipFilePath = new File(appCache.getPath(), "badget.zip").getPath();
+        String appVersion = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
+
+        Log.d(TAG, "appVersion: " + appVersion);
+
+        String zipFilePath = new File(appCache.getPath(), "badget-" + appVersion + ".zip").getPath();
         CommonUtils.unzip(zipFilePath, true);
         List<String> cmds = new ArrayList<>();
 
@@ -454,7 +459,8 @@ public class ConfigUtils {
 
     // /data/local/tmp/badget/arm64-v8a[arm64-v7a]
     public static List<String> getGadgetLibNames() {
-        File gadgets = new File("/data/local/tmp/badget/arm64-v8a");
+        String ABI = android.os.Process.is64Bit() ? ConfigUtils.ABI_V8A : ConfigUtils.ABI_V7A;
+        File gadgets = new File("/data/local/tmp/badget/" + ABI);
         return Arrays.stream(Objects.requireNonNull(gadgets.listFiles())).map(File::getName).collect(Collectors.toList());
     }
 }

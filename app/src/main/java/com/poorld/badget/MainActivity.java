@@ -136,7 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
 
-            int result = ConfigUtils.firstInit(getApplicationContext());
+            int result = 0;
+            try {
+                result = ConfigUtils.firstInit(getApplicationContext());
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
             if (result == 0) {
                 mainHandler.sendEmptyMessage(MSG_INIT_SUCCESS);

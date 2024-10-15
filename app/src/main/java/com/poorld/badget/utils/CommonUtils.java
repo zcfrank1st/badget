@@ -318,7 +318,7 @@ public class CommonUtils {
      * @param toFile    应用的包路径
      * @return int
      */
-    private static int doCopy(String fromFiles, String toFile) {
+    public static int doCopy(String fromFiles, String toFile) {
         Log.d(TAG, "复制文件到" + toFile);
         try {
             FileInputStream fileInput = new FileInputStream(fromFiles);
