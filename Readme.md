@@ -2,7 +2,7 @@
 
 Badget是frida的持久化工具，通过注入frida-gadget，让目标app加载该so文件，进而实现frida的hook功能。
 
-- gadget版本: 16.0.17
+- gadget版本: 16.5.6 (包含strongR)
 - 参考项目  [xcubebase](https://github.com/svengong/xcubebase)
 - 参考博客地址: [Frida持久化方案(Xcube)之方案二——基于xposed](https://bbs.kanxue.com/thread-266784.htm)
 
