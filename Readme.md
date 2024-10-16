@@ -44,26 +44,26 @@ Badget是frida的持久化工具，通过注入frida-gadget，让目标app加载
   2. Connect
   3. Script
   4. ScriptDirectory
+- 多gadget版本支持，可离线添加
 
 
 # 未实现
-- frida-gadget版本动态下载(无需内置到assets目录)
-- 监听脚本内容变化，并更新到/data/local/tmp/badget/packageName/hook.js
+- frida-gadget版本在线下载（需服务端或依赖github，待定）
+- ~~监听脚本内容变化，并更新到/data/local/tmp/badget/packageName/hook.js~~
 - 脚本仓库(脚本市场)
-- frida-gadget库去特征
-- 日志悬浮窗
-- 设置界面
+- 脚本日志悬浮窗
+
+- 不依赖xposed打包，提供多种打包方式
 
 
-# V1.2
-1.添加签名
-
-2.优化代码
+# V1.3
+1.gadget多版本支持
 
 
 ## 参考&致谢
 - [svengong/xcubebase](https://github.com/svengong/xcubebase)
 - [Dr-TSNG/Hide-My-Applist](https://github.com/Dr-TSNG/Hide-My-Applist)
 - [SeeFlowerX](https://github.com/SeeFlowerX)
+- [poorld/badget](https://github.com/poorld/badget)
 
 
