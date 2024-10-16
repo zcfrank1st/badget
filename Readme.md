@@ -7,8 +7,8 @@ Badget是frida的持久化工具，通过注入frida-gadget，让目标app加载
 - 参考博客地址: [Frida持久化方案(Xcube)之方案二——基于xposed](https://bbs.kanxue.com/thread-266784.htm)
 
 <div>
-<img src="https://github.com/poorld/badget/blob/main/1.png" width="300">&nbsp;&nbsp;
-<img src="https://github.com/poorld/badget/blob/main/2.png" width="300">
+<img src="https://github.com/zcfrank1st/badget/blob/main/1.png" width="300">&nbsp;&nbsp;
+<img src="https://github.com/zcfrank1st/badget/blob/main/2.png" width="300">
 </div>
 
 
