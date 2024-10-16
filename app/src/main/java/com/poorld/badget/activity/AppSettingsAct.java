@@ -206,6 +206,7 @@ public class AppSettingsAct extends AppCompatActivity {
         public void refreshPreferences() {
             if (pkgConfig != null) {
                 InteractionType type = pkgConfig.getType();
+                prefVersion.setSummary(pkgConfig.getGadgetVersion());
                 //InteractionType type = pkgConfig.getType();
                 if (type != null) {
                     updateInteractionTypePreferences(type);
@@ -333,6 +334,11 @@ public class AppSettingsAct extends AppCompatActivity {
 
                     Log.d(TAG, "lib so removed！" + String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetLibName(pkgConfig.getSoName())) + "->" + delete1);
                     Log.d(TAG, "lib config so removed！" + String.format(cmdSoTemplate, pkgConfig.getPkgName(), ConfigUtils.getGadgetConfigLibName(pkgConfig.getSoName()))+ "->" + delete2);
+
+                    // revert default
+                    prefVersion.setSummary("");
+                    prefType.setSummary("Script");
+                    prefJs.setSummary("无");
 
                     mConfigCache.addPkgConfigs(pkgConfig.getPkgName(), null);
 

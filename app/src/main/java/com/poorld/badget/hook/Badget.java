@@ -100,7 +100,10 @@ public class Badget implements IXposedHookLoadPackage {
                     Log.d(TAG, "appGadgetLib: " + appGadgetLib);
                     if (!appGadgetLib.exists()) {
                         String gadgetLibName = ConfigUtils.getGadgetLibName(pkgConfig.getSoName());
-//                        TODO 是否可以自行添加 native 加载目录
+                        if (!new File(applibDir + File.separator + gadgetLibName).exists()) {
+                            Log.d(TAG, "hook dir not found, create");
+                            ShellUtils.fastCmd("mkdir -p " + applibDir + File.separator);
+                        }
                         CommonUtils.doCopy(ConfigUtils.getBadgetDataPath() + ABI + File.separator + pkgConfig.getGadgetVersion(), applibDir + File.separator + gadgetLibName);
                     }
 

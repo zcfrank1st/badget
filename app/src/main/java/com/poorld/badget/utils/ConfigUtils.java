@@ -320,11 +320,11 @@ public class ConfigUtils {
         /**
          * unzip /data/user/0/com.poorld.badget/app_cache/badget.zip
          */
-        String appVersion = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
+//        String appVersion = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
 
-        Log.d(TAG, "appVersion: " + appVersion);
+//        Log.d(TAG, "appVersion: " + appVersion);
 
-        String zipFilePath = new File(appCache.getPath(), "badget-" + appVersion + ".zip").getPath();
+        String zipFilePath = new File(appCache.getPath(), "badget.zip").getPath();
         CommonUtils.unzip(zipFilePath, true);
         List<String> cmds = new ArrayList<>();
 
@@ -340,6 +340,7 @@ public class ConfigUtils {
          */
         cmds.add("mkdir " + ConfigUtils.getBadgetDataPath());
         cmds.add(String.format("cp -r %s/* %s", appCache.getPath(), ConfigUtils.DATA_LOCAL_TMP));
+        Log.d(TAG, appCache.getPath() + "==" + ConfigUtils.DATA_LOCAL_TMP);
         cmds.add("chmod -R 777 " + ConfigUtils.BADGET_DATA_PATH);
         cmds.add("rm -rf " + appCache.getPath());
 
