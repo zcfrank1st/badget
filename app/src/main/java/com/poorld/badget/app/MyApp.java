@@ -7,6 +7,7 @@ import androidx.appcompat.BuildConfig;
 
 import com.poorld.badget.utils.ConfigUtils;
 import com.topjohnwu.superuser.Shell;
+import com.topjohnwu.superuser.ShellUtils;
 
 public class MyApp extends Application {
 
@@ -27,6 +28,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        ShellUtils.fastCmd("pm grant com.poorld.badget android.permission.READ_LOGS");
         //ConfigUtils.initConfig();
     }
 

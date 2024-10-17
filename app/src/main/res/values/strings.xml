@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">badget</string>
 
     <string name="home_xposed_activated">Module Activated [%s]</string>

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<!--    无效   -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
@@ -42,6 +43,17 @@
         <meta-data
             android:name="xposedscope"
             android:resource="@array/example_scope" />
+
+
+        <meta-data
+            android:name="LogcatWindowEntrance"
+            android:value="true" />
+
+        <!-- 通知栏入口 -->
+        <meta-data
+            android:name="LogcatNotifyEntrance"
+            android:value="false" />
+
     </application>
 
 </manifest>

@@ -9,6 +9,8 @@ Badget是frida的持久化工具，通过注入frida-gadget，让目标app加载
 <div>
 <img src="https://github.com/zcfrank1st/badget/blob/main/1.png" width="300">&nbsp;&nbsp;
 <img src="https://github.com/zcfrank1st/badget/blob/main/2.png" width="300">
+<img src="https://github.com/zcfrank1st/badget/blob/main/3.png" width="300">
+<img src="https://github.com/zcfrank1st/badget/blob/main/4.png" width="300">
 </div>
 
 
@@ -51,14 +53,15 @@ Badget是frida的持久化工具，通过注入frida-gadget，让目标app加载
 - frida-gadget版本在线下载（需服务端或依赖github，待定）
 - ~~监听脚本内容变化，并更新到/data/local/tmp/badget/packageName/hook.js~~
 - 脚本仓库(脚本市场)
-- 脚本日志悬浮窗
-
+- ~~脚本日志悬浮窗~~
 - 不依赖xposed打包，提供多种打包方式
 
 
 # V1.3
 1.gadget多版本支持
 
+# V1.4
+1.logcat 悬浮日志框，可debug查询
 
 ## 参考&致谢
 - [svengong/xcubebase](https://github.com/svengong/xcubebase)

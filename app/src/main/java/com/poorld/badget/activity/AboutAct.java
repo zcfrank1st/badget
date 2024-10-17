@@ -36,6 +36,7 @@ public class AboutAct extends AbsAboutActivity {
 
         items.add(new Category("Developers"));
         items.add(new Contributor(R.mipmap.avater, "poorld", "https://github.com/poorld", "https://github.com/poorld/badget"));
+        items.add(new Contributor(R.mipmap.zc, "zcfrank1st", "https://github.com/zcfrank1st", "https://github.com/zcfrank1st/badget"));
 
         items.add(new Category("参考&致谢"));
         items.add(new Contributor(R.mipmap.svengong, "svengong", "xcubebase", "https://github.com/svengong/xcubebase"));
